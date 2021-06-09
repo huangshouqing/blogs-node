@@ -4,7 +4,6 @@ const { successModel, errorModel } = require('../model/resModel.js')
 const { set } = require('./../db/redis')
 const handleUserRouter = async (req, res) => {
   const router = new routeMatching(req, res)
-  let response = {}
 
   // 登录
   await router.post('/api/user/login', async (req, res) => {
@@ -16,24 +15,17 @@ const handleUserRouter = async (req, res) => {
       req.session.realname = data.realname
       // update redis
       set(req.sessionId, req.session)
-      response = new successModel('登录成功')
+      res.response = new successModel('登录成功')
     } else {
-      response = new errorModel('登录失败')
+      res.response = new errorModel('登录失败')
     }
   })
-
-  // // 登录验证
-  // await router.get('/api/user/loginCheck', async (req, res) => {
-  //   // 从cookie中读取信息
-  //   const { username } = req.session
-  //   if (username) {
-  //     response = new successModel({ session: req.session }, '已登录')
-  //   } else {
-  //     response = new errorModel('尚未登录')
-  //   }
-  // })
-
-  return response
+  // 退出登录
+  await router.get('/api/user/exit', async (req, res) => {
+    // 将对应sessionId的值设为空即可
+    set(req.sessionId, {})
+    res.response = new successModel('退出成功')
+  })
 }
 
 module.exports = handleUserRouter

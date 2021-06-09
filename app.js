@@ -15,28 +15,28 @@ const serverHandle = async (req, res) => {
   // 处理postData，将postData挂载在req的body上
   req.body = await getPostData(req)
   // 等待路由返回的结果
-  const blogData = await handleBlogRouter(req, res)
-  if (blogData && Object.keys(blogData).length > 0) {
-    if (blogData.msg === '尚未登录') {
+  await handleBlogRouter(req, res)
+  if (res.response && Object.keys(res.response).length > 0) {
+    if (res.response.msg === '尚未登录') {
       res.writeHead(401)
     } else if (GETNSC()) {
       // 如果需要设置cookie的话
       // 服务端设置返回的cookie写入浏览器中
       res.setHeader('Set-Cookie', `userid=${GETID()};path=/; httpOnly;expires=${getCookieExpires(24 * 60 * 60 * 1000)}`)
     }
-    return res.end(JSON.stringify(blogData))
+    return res.end(JSON.stringify(res.response))
 
   }
-  const userData = await handleUserRouter(req, res)
-  if (userData && Object.keys(userData).length > 0) {
-    if (blogData.msg === '尚未登录') {
+  await handleUserRouter(req, res)
+  if (res.response && Object.keys(res.response).length > 0) {
+    if (res.response.msg === '尚未登录') {
       res.writeHead(401)
     } else if (GETNSC()) {
       // 如果需要设置cookie的话
       // 服务端设置返回的cookie写入浏览器中
       res.setHeader('Set-Cookie', `userid=${GETID()};path=/; httpOnly;expires=${getCookieExpires(24 * 60 * 60 * 1000)}`)
     }
-    return res.end(JSON.stringify(userData))
+    return res.end(JSON.stringify(res.response))
 
   }
   // 未命中路由的话提示404
