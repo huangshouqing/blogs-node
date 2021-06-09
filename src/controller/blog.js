@@ -42,7 +42,6 @@ const newBlog = (blogData = {}) => {
   // 新建blog语句
   const sql = `insert into blogs (title,content,author,createtime) values ('${title}','${content}','${author}','${createtime}')`
   return exec(sql).then(insertData => {
-    console.log('insertData', insertData)
     return {
       id: insertData.insertId,
     }
@@ -72,11 +71,12 @@ const updateBlog = (id, blogData = {}) => {
 /**
  * 
  * @param {博客id} id 
+ * @param {博客的作者} author 
  * @returns 
  */
-const delBlog = (id,author) => {
+const delBlog = (id, author) => {
   // 假删除blog语句
-  const sql = `update blogs set state='0' where id = ${id} and author = '${author}'`
+  const sql = `delete from blogs where id='${id}' and author='${author}'`;
   return exec(sql).then(delData => {
     if (delData.affectedRows > 0) {
       return true

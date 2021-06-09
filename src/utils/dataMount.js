@@ -7,9 +7,9 @@ const getPostData = (req) => {
       return resolve({})
     }
     // 如果数据格式不是json的话，不予处理
-    if (req.headers['content-type'] !== 'application/json') {
-      return resolve({})
-    }
+    // if (req.headers['content-type'] !== 'application/json') {
+    //   return resolve({})
+    // }
     let postData = '';
     req.on('data', chunk => {
       postData += chunk.toString()
@@ -30,7 +30,8 @@ const getQueryData = (req) => {
   return queryString.parse(req.url.split('?')[1])
 }
 
+
 module.exports = {
   getPostData,
-  getQueryData
+  getQueryData,
 }
