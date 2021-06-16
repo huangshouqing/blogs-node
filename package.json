@@ -5,8 +5,9 @@
   "main": "bin/www.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "cross-env NODE_ENV=dev nodemon ./bin/www.js",
-    "prd": "cross-env NODE_ENV=production nodemon ./bin/www.js"
+    "serve":"cross-env NODE_ENV=dev nodemon ./bin/www.js",
+    "dev": "cross-env NODE_ENV=dev pm2 start ./bin/www.js",
+    "prd": "cross-env NODE_ENV=production pm2 start ./bin/www.js"
   },
   "author": "",
   "license": "ISC",
@@ -15,7 +16,13 @@
     "nodemon": "^1.18.10"
   },
   "dependencies": {
+    "async": "^3.2.0",
+    "cheerio": "^1.0.0-rc.10",
+    "iconv-lite": "^0.6.3",
     "mysql": "^2.18.1",
-    "redis": "^3.1.2"
+    "redis": "^3.1.2",
+    "request": "^2.88.2",
+    "superagent": "^6.1.0",
+    "superagent-charset": "^1.2.0"
   }
 }

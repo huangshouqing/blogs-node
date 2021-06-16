@@ -4,6 +4,7 @@ const getPostData = (req) => {
   return new Promise((resolve, reject) => {
     // 如果请求方式不是post，不予处理
     if (req.method !== 'POST') {
+      req.body = {}
       return resolve({})
     }
     // 如果数据格式不是json的话，不予处理
@@ -17,8 +18,10 @@ const getPostData = (req) => {
     req.on('end', () => {
       //  post数据接收完毕
       if (postData.length === 0) {
+        req.body = {}
         return resolve({})
       }
+      req.body = JSON.parse(postData)
       return resolve(
         JSON.parse(postData)
       )
