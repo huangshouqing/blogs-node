@@ -5,8 +5,8 @@ let REDIS_CONF;
 // 根据不同环境配置不同的mysql配置
 if (env === 'dev') {
   MYSQL_CONF = {
-    host: 'localhost',
-    user: "root",
+    host: '8.134.121.215',
+    user: "admin",
     password: 'admin123',
     port: 3306,
     database: 'myblog'

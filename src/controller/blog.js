@@ -6,7 +6,47 @@ const { exec } = require('../db/mysql.js')
  * @param {关键词} keyword 
  * @returns 
  */
-const getList = (author, keyword) => {
+const getList = async (type_id, curPage, pageSize) => {
+  // const typeList = await exec('select type_id from blogs group by type_id')
+  // let sql = ''
+  // typeList.forEach((item, index) => {
+  //   if (index < typeList.length - 1) {
+  //     sql += `select * from blogs where state=1 and type_id=${item.type_id} UNION `
+  //   } else {
+  //     sql += `select * from blogs where state=1 and type_id=${item.type_id} `
+  //   }
+  // })
+  // sql += `order by createtime desc`
+
+  let sql = ''
+  sql += `select * from blogs where state=1 and type_id=${type_id} `
+  if (curPage === 1) {
+    sql += `order by createtime desc limit 0,${pageSize}`
+  } else {
+    sql += `order by createtime desc limit ${(curPage - 1) * pageSize},${curPage * pageSize}`
+  }
+  let sql2 = `SELECT *,COUNT(1) from blogs where state=1 and type_id=${type_id}`
+  let list = []
+  let total = 0
+  try {
+    list = await exec(sql)
+    total = (await exec(sql2))[0]['COUNT(1)']
+  } catch (error) {
+    console.log(error)
+  }
+  return {
+    list,
+    total
+  }
+}
+
+/**
+ * 
+ * @param {*} author 
+ * @param {*} keyword 
+ * @returns 
+ */
+const getAllList = (author, keyword) => {
   let sql = 'select * from blogs where 1=1 and state=1 '
   if (author) {
     sql += `and author='${author}' `
@@ -17,6 +57,7 @@ const getList = (author, keyword) => {
   sql += 'order by createtime desc'
   return exec(sql)
 }
+
 
 /**
  * 输出blog的详情
@@ -37,10 +78,10 @@ const getDetail = (id) => {
  * @returns 
  */
 const newBlog = (blogData = {}) => {
-  const { title, content, author } = blogData
+  const { title, content, author, type } = blogData
   const createtime = Date.now()
   // 新建blog语句
-  const sql = `insert into blogs (title,content,author,createtime) values ('${title}','${content}','${author}','${createtime}')`
+  const sql = `insert into blogs (title,content,author,createtime,type_id) values ('${title}','${content}','${author}','${createtime}','${type}')`
   return exec(sql).then(insertData => {
     return {
       id: insertData.insertId,
@@ -57,7 +98,7 @@ const updateBlog = (id, blogData = {}) => {
   const { title, content } = blogData
   const createtime = Date.now()
   // 更新blog语句
-  const sql = `update blogs set title='${title}', content='${content}' where id = ${id}`
+  const sql = `update blogs set title='${title}', content='${content}',createtime='${createtime}' where id = ${id}`
   return exec(sql).then(updateData => {
     if (updateData.affectedRows > 0) {
       return true
@@ -86,13 +127,53 @@ const delBlog = (id, author) => {
 
   })
 }
+/**
+ * 
+ * @returns 获取博客类型接口
+ */
+const getTypeList = () => {
+  // blog语句
+  const sql = `select * from type`;
+  return exec(sql)
+}
 
+/**
+ * 
+ * @param {博客id} blogid 
+ * @param {评论的内容} content 
+ * @param {评论由谁写的} author 
+ */
+const addRecomment = (recomment = {}) => {
+  const { blogid, content, author } = recomment
+  const createtime = Date.now()
+  // 新建blog语句
+  const sql = `insert into remark (blogid,content,author,createtime) values ('${blogid}','${content}','${author}','${createtime}')`
+  return exec(sql).then(insertData => {
+    return {
+      id: insertData.insertId,
+    }
+  })
+}
+/**
+ * 
+ * @param {博客id} blogid 
+ * @returns 
+ */
+const getRecomment = (blogid) => {
+  // 查询详情sql语句
+  let sql = `select * from remark where blogid=${blogid} `
+  return exec(sql)
+}
 
 
 module.exports = {
   getList,
+  getAllList,
   getDetail,
   newBlog,
   updateBlog,
-  delBlog
+  delBlog,
+  getTypeList,
+  addRecomment,
+  getRecomment
 }

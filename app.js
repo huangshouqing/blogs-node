@@ -6,6 +6,7 @@ require('./src/router/blog.js')
 require('./src/router/user.js')
 require('./src/router/book.js')
 require('./src/router/movie.js')
+require('./src/router/tv.js')
 // 所有的业务服务在这个文件中写
 const serverHandle = async (req, res) => {
   res.setHeader('Content-type', 'application/json')
