@@ -14,8 +14,10 @@ module.exports = {
 
   // VIP解析接口
   // vip_over: 'https://660e.com?url=',
-  vip_over: 'https://17kyun.com/api.php?url=',
+  // vip_over: 'https://17kyun.com/api.php?url=',
   // vip_over: 'https://jx.yunboys.cn/?url=',
+  // vip_over: 'https://www.cuan.la/m3u8.php?url=',
+
   // 服务器地址
   server: '',
 

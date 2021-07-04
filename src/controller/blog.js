@@ -95,10 +95,11 @@ const newBlog = (blogData = {}) => {
  * @param {是一个博客对象，包含title content属性} blogData 
  */
 const updateBlog = (id, blogData = {}) => {
-  const { title, content } = blogData
+  let { title, content } = blogData
+  content = content.replace(/\'/g, '"')
   const createtime = Date.now()
   // 更新blog语句
-  const sql = `update blogs set title='${title}', content='${content}',createtime='${createtime}' where id = ${id}`
+  const sql = `update blogs set title='${title}', content='${content}', createtime='${createtime}' where id = ${id}`
   return exec(sql).then(updateData => {
     if (updateData.affectedRows > 0) {
       return true

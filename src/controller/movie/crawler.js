@@ -37,7 +37,7 @@ const getPlayList = async (src, type) => {
     // 对电影做特殊处理
     $('#js-siteact .top-list-btns .btn-play').each((i, v) => {
       const label = $(v).text().trim()
-      const value = config.vip_over + $(v).attr('href')
+      const value = $(v).attr('href')
       playList.push({
         label,
         value
@@ -47,7 +47,7 @@ const getPlayList = async (src, type) => {
     if ($('#js-siteact #js-site-wrap .num-tab-main').length > 0) {
       $('#js-siteact #js-site-wrap .num-tab-main').last().children('a').each((i, v) => {
         const label = $(v).text().trim()
-        const value = config.vip_over + $(v).attr('href')
+        const value = $(v).attr('href')
         playList.push({
           label,
           value
@@ -56,7 +56,7 @@ const getPlayList = async (src, type) => {
     } else if ($('#js-siteact #js-site-wrap .m-series-number-container').length > 0) {
       $('#js-siteact #js-site-wrap .m-series-content a').each((i, v) => {
         const label = $(v).text().trim()
-        const value = config.vip_over + $(v).attr('href')
+        const value = $(v).attr('href')
         playList.push({
           label,
           value
@@ -65,7 +65,7 @@ const getPlayList = async (src, type) => {
     } else if ($('.js-juji-content .juji-main .w-newfigure').length > 0) {
       $('.js-juji-content .juji-main .w-newfigure .js-link').each((i, v) => {
         const label = $(v).text().trim()
-        const value = config.vip_over + $(v).attr('href')
+        const value = $(v).attr('href')
         playList.push({
           label,
           value
